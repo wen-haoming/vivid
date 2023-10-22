@@ -14,6 +14,14 @@
   "activationEvents": [
     "onCommand:extension.readVueFileContent"
   ],
+  "simple-git-hooks": {
+    "pre-commit": "lint-staged "
+  },
+  "lint-staged": {
+    "*.ts?(x)": [
+      "eslint --fix"
+    ]
+  },
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -49,13 +57,11 @@
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "pretest": "pnpm run compile && pnpm run lint",
-    "compile-vs":"vsce package",
+    "compile-vs": "vsce package",
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/lodash.debounce": "^4.0.8",
     "@types/mocha": "^10.0.3",
-    "@types/node": "~16.18.59",
     "@types/vscode": "^1.83.1",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
@@ -63,18 +69,19 @@
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
+    "lint-staged": "^15.0.2",
     "lru-cache": "^10.0.1",
     "mocha": "^10.2.0",
+    "simple-git-hooks": "^2.9.0",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@babel/types": "^7.23.0",
-    "@vue/compiler-sfc": "3.3.4",
-    "acorn": "^8.10.0",
-    "estree-walker": "^3.0.3",
-    "lodash.debounce": "^4.0.8"
+    "@vue/compiler-dom": "^3.3.6",
+    "@vue/compiler-sfc": "3.3.4"
   }
 }

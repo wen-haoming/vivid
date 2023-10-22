@@ -11,14 +11,12 @@ import { debounce, setCursorPosition } from "./utils";
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView; //存储 Webview 视图
   private _context: vscode.ExtensionContext; // 存储扩展上下文对象
-  private _token: string | undefined; // 存储token
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
     context: vscode.ExtensionContext
   ) {
     this._context = context;
-    this._token = this._context.globalState.get("Token");
   }
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     this._view = webviewView;
@@ -108,8 +106,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
     const nonce = getNonce();
 
-    // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
-    return /*html*/ `
+    return `
        <!DOCTYPE html>
        <html lang="en">
          <head>

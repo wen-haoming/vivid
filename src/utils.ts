@@ -4,7 +4,6 @@ import {
   isCallExpression,
   isIdentifier,
   isMemberExpression,
-  identifier,
 } from "@babel/types";
 
 type DebounceFunction<T extends any[]> = (...args: T) => void;
