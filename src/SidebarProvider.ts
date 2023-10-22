@@ -62,45 +62,49 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           );
           break;
         case "selectItem":
-          setCursorPosition(value.line,value.column)
+          setCursorPosition(value.line, value.column);
           break;
         case "navigateBack":
-            vscode.commands.executeCommand('workbench.action.navigateBack');
-            break;
+          vscode.commands.executeCommand("workbench.action.navigateBack");
+          break;
         case "navigateForward":
-            vscode.commands.executeCommand('workbench.action.navigateForward');
-            break;
+          vscode.commands.executeCommand("workbench.action.navigateForward");
+          break;
       }
     });
     parseFile(webviewView.webview);
-    const debounceFn = debounce(parseFile,500)
+    const debounceFn = debounce(parseFile, 500);
 
     vscode.workspace.onDidChangeTextDocument(() => {
       // 检查更改是否发生在当前活动文件中
-        debounceFn(webviewView.webview);
+      debounceFn(webviewView.webview);
     });
 
     vscode.window.onDidChangeActiveTextEditor(() => {
-    // 检查更改是否发生在当前活动文件中
+      // 检查更改是否发生在当前活动文件中
       debounceFn(webviewView.webview);
-  });
+    });
   }
 
   //用于生成 Webview 的 HTML 内容
   private _getHtmlForWebview(webview: vscode.Webview) {
-    const stylesUri = getUri(webview, this._extensionUri, [
-      "webview-ui",
-      "build",
-      "assets",
-      "index.css",
-    ]);
+    const isDev = process.env.NODE_ENV !== "production";
+
+    const stylesUri = getUri(
+      webview,
+      this._extensionUri,
+      isDev
+        ? ["webview-ui", "build", "assets", "index.css"]
+        : ["assets", "index.css"]
+    );
     // The JS file from the Vue build output
-    const scriptUri = getUri(webview, this._extensionUri, [
-      "webview-ui",
-      "build",
-      "assets",
-      "index.js",
-    ]);
+    const scriptUri = getUri(
+      webview,
+      this._extensionUri,
+      isDev
+        ? ["webview-ui", "build", "assets", "index.js"]
+        : ["assets", "index.js"]
+    );
 
     const nonce = getNonce();
 

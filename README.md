@@ -1,10 +1,11 @@
-# vivid2 README
+# vivid README
 
-This is the README for your extension "vivid2". After writing up a brief description, we recommend including the following sections.
+Vivid is a powerful code organization plugin designed to help developers effectively organize and categorize their code. It offers the following features:
+
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+<!-- 
 
 For example if there is an image subfolder under your extension project workspace:
 
@@ -65,7 +66,6 @@ You can author your README using Visual Studio Code. Here are some useful editor
 
 ## For more information
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
-**Enjoy!**
+**Enjoy!** -->

@@ -28,7 +28,7 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
     methods: [] as any[],
   };
 
-  function createItem(tagName: string, node: Node, isLeaf?: boolean) {
+  function createItem(tagName: string, node: any, isLeaf?: boolean) {
     const { start } = node.loc || {};
     const column = start.column;
     const key = (Math.random() * 1000000).toString(24);
@@ -52,7 +52,7 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
   }
 
   walk(scriptSetupAst || scriptAst, {
-    enter(node: Node) {
+    enter(node: any) {
       if (calleeNameNode("ref", node)) {
         stateObject.state.ref.push(createItem("ref", node));
       } else if (calleeNameNode("computed", node)) {
