@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import {
   parse,
   compileScript,
-  compileTemplate,
   SFCParseOptions,
   walk,
 } from "@vue/compiler-sfc";

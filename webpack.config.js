@@ -4,7 +4,7 @@
 
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const nodeExternals = require('webpack-node-externals')
+// const nodeExternals = require('webpack-node-externals')
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 
@@ -21,7 +21,7 @@ const extensionConfig = {
   externals: [{
     vscode: "commonjs vscode", // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
     // modules added here also need to be added in the .vscodeignore file
-  },nodeExternals()],
+  }],
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: [".ts", ".js"],

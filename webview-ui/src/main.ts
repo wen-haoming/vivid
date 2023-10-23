@@ -6,7 +6,7 @@ import '@arco-design/web-vue/dist/arco.css';
 
 import App from "./App.vue";
 
-  document.body.setAttribute('arco-theme', 'dark');
+document.body.setAttribute('arco-theme', 'dark');
 
 
 createApp(App).mount("#app");

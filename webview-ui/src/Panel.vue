@@ -49,7 +49,7 @@ const definePropsList = computed(() => panelState.value.state.defineProps);
 </script>
 <template>
   <div>
-    <div class="flex justify-between">
+    <div class="flex justify-between w-100%">
       <a-button type="secondary" class="flex-1 m-r-5px" @click="navigateBack">
         &lt;
       </a-button>
