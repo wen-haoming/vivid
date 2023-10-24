@@ -1,11 +1,6 @@
 import * as vscode from "vscode";
-import {
-  parse,
-  compileScript,
-  SFCParseOptions,
-  walk,
-} from "@vue/compiler-sfc";
-import { calleeNameNode, isVariable } from "./utils";
+import { parse, compileScript, SFCParseOptions, walk } from "@vue/compiler-sfc";
+import { calleeNameNode, getContextLines, isVariable } from "./utils";
 import { isIdentifier } from "@babel/types";
 
 export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
@@ -17,7 +12,7 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
     }
   );
 
-  const stateObject = {
+  const treeData = {
     state: {
       ref: [] as any[],
       computed: [] as any[],
@@ -33,21 +28,24 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
     const { start } = node.loc || {};
     const column = start.column;
     const key = (Math.random() * 1000000).toString(24);
+    const line = rest.loc.start.line + start.line - 2;
+
     if (!isLeaf) {
       return {
         title: node?.id?.name || tagName,
         tagName,
         key,
-        line: rest.loc.start.line + start.line - 2,
+        line,
         column,
+        overview: getContextLines(descriptor.source, line),
       };
     } else {
-      const line = rest.loc.start.line + start.line - 2;
       return {
         title: `${line}:${column}`,
         key,
         line,
         column,
+        overview: getContextLines(descriptor.source, line),
       };
     }
   }
@@ -55,21 +53,21 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
   walk(scriptSetupAst || scriptAst, {
     enter(node: any) {
       if (calleeNameNode("ref", node)) {
-        stateObject.state.ref.push(createItem("ref", node));
+        treeData.state.ref.push(createItem("ref", node));
       } else if (calleeNameNode("computed", node)) {
-        stateObject.state.computed.push(createItem("computed", node));
+        treeData.state.computed.push(createItem("computed", node));
       } else if (calleeNameNode("reactive", node)) {
-        stateObject.state.reactive.push(createItem("reactive", node));
+        treeData.state.reactive.push(createItem("reactive", node));
       } else if (calleeNameNode("defineProps", node)) {
-        stateObject.state.defineProps.push(createItem("defineProps", node));
+        treeData.state.defineProps.push(createItem("defineProps", node));
       } else if (isIdentifier(node?.callee, { name: "watch" })) {
-        stateObject.watch.push(createItem("watch", node));
+        treeData.watch.push(createItem("watch", node));
       } else if (isIdentifier(node?.callee, { name: "watchEffect" })) {
-        stateObject.watchEffect.push(createItem("watch", node));
+        treeData.watchEffect.push(createItem("watch", node));
       }
 
       if (bindings && isVariable(node, Object.keys(bindings))) {
-        Object.entries(stateObject.state).forEach(([key, list]) => {
+        Object.entries(treeData.state).forEach(([key, list]) => {
           list.forEach((item) => {
             if (node.object.name === item.title) {
               if (item.children) {
@@ -90,7 +88,7 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
   //     console.log('Tag:', node.tag);
   //     console.log('Attributes:', node.props);
   //   }
-  
+
   //   // 遍历子节点
   //   if (node.children && node.children.length > 0) {
   //     for (const childNode of node.children) {
@@ -105,7 +103,7 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
   //   preprocessLang: descriptor.template.lang,
   //   id: "123",
   // });
-  
+
   // traverseAst(templateAst);
 
   // walk(, {
@@ -126,7 +124,10 @@ export const parseVueSFC = (vueSfc: string, parseOptions?: SFCParseOptions) => {
   //   },
   // });
 
-  return stateObject;
+  return {
+    treeData: treeData,
+    source: descriptor.source,
+  };
 };
 
 export const parseFile = (webView: vscode.WebviewView["webview"]) => {
@@ -138,10 +139,9 @@ export const parseFile = (webView: vscode.WebviewView["webview"]) => {
     if (fileName.endsWith(".vue")) {
       const fileContent = document.getText();
       // 在这里处理 .vue 文件的内容
-      const res = parseVueSFC(fileContent);
       webView.postMessage({
         command: "stateObject",
-        value: res,
+        value: parseVueSFC(fileContent),
       });
     }
   }

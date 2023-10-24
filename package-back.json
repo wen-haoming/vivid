@@ -1,0 +1,77 @@
+{
+  "name": "vivid",
+  "displayName": "vivid",
+  "description": "",
+  "publisher": "vivid",
+  "version": "0.0.7",
+  "engines": {
+    "vscode": "^1.83.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "repository": "https://github.com/wen-haoming/vivid",
+  "activationEvents": [
+    "onCommand:extension.readVueFileContent"
+  ],
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.ts?(x)": [
+      "eslint --fix"
+    ]
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.activateVivid",
+        "title": "vivid"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "extension.activateVivid",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "start:webview": "cd webview-ui && npm run start",
+    "build:webview": "cd webview-ui && npm run build",
+    "vscode:prepublish": "pnpm run compile",
+    "compile": " npm run  build:webview && webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "compile-vs": "vsce package",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.3",
+    "@types/vscode": "^1.83.1",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "@vscode/test-electron": "^2.3.5",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.52.0",
+    "glob": "^10.3.10",
+    "lint-staged": "^15.0.2",
+    "lru-cache": "^10.0.1",
+    "mocha": "^10.2.0",
+    "simple-git-hooks": "^2.9.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@babel/types": "^7.23.0",
+    "@vue/compiler-dom": "^3.3.6",
+    "@vue/compiler-sfc": "3.3.4"
+  }
+}

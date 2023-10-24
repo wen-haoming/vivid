@@ -1,10 +1,10 @@
 <script setup lang="tsx">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, shallowRef } from "vue";
 import { vscode } from "./utilities/vscode";
 import { computed } from "vue";
 import Tree from "./components/Tree.vue";
 
-const panelState = ref({
+const panelState = shallowRef({
   state: {
     ref: [],
     computed: [],
@@ -20,8 +20,8 @@ onMounted(() => {
     const message = event.data;
     switch (message.command) {
       case "stateObject":
-        panelState.value = message?.value;
-        break;
+        const { treeData } = message?.value;
+        panelState.value = treeData;
     }
   });
 });
@@ -37,7 +37,6 @@ const navigateForward = () => {
     command: "navigateForward",
   });
 };
-
 
 const stateList = computed(() => [
   ...panelState.value.state.ref,
@@ -64,13 +63,13 @@ const definePropsList = computed(() => panelState.value.state.defineProps);
     <div class="flex-1 overflow-y-auto p-y-5px">
       <a-tabs default-active-key="state" class="vivid-tree">
         <a-tab-pane key="state" title="state">
-          <Tree :data="stateList" />
+          <Tree :data="stateList"   />
         </a-tab-pane>
         <a-tab-pane key="props" title="props">
-          <Tree :data="definePropsList" />
+          <Tree :data="definePropsList"    />
         </a-tab-pane>
         <a-tab-pane key="watch" title="watch">
-          <Tree :data="panelState.watch" />
+          <Tree :data="panelState.watch"    />
         </a-tab-pane>
       </a-tabs>
     </div>

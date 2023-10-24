@@ -58,3 +58,18 @@ export function isVariable(node: Node, varList: string[]) {
       isMemberExpression(node) && isIdentifier(node.object, { name: name })
   );
 }
+
+/**
+ * 获取对应代码的上下文
+ * @param text 
+ * @param index 
+ * @param numLines 
+ * @returns 
+ */
+export function getContextLines(text: string, index: number, numLines: number = 4): string {
+  const lines = text.split('\n');
+  const startIndex = Math.max(0, index - numLines);
+  const endIndex = Math.min(lines.length - 1, index + numLines);
+  const contextLines = lines.slice(startIndex, endIndex + 1);
+  return contextLines.join('\n');
+}
