@@ -11,3 +11,4 @@ vsc-extension-quickstart.md
 node_modules
 webview-ui
 pnpm-lock.yaml
+*.vsix

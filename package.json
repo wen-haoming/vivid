@@ -3,7 +3,7 @@
   "displayName": "vivid",
   "description": "",
   "publisher": "vivid",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.83.0"
   },
